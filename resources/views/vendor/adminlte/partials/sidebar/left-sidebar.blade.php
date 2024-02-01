@@ -23,7 +23,7 @@
                 <li class="nav-header"> AGGIUNTO </li>
                 <li class="nav-item has-treeview ">
                    <a class ="nav-link" href="{{ route('admin.pages.about') }}">
-                     <i class="fa fa-info"></i> <span>About</span>
+                     <i class="fa fa-info"></i> <span> Info </span>
                     </a>
                 </li>
             </ul>

@@ -20,12 +20,6 @@
                 @endif>
                 {{-- Configured sidebar links --}}
                 @each('adminlte::partials.sidebar.menu-item', $adminlte->menu('sidebar'), 'item')
-                <li class="nav-header"> AGGIUNTO </li>
-                <li class="nav-item has-treeview ">
-                   <a class ="nav-link" href="{{ route('admin.pages.about') }}">
-                     <i class="fa fa-info"></i> <span> Info </span>
-                    </a>
-                </li>
             </ul>
         </nav>
     </div>

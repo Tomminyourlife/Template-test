@@ -10,42 +10,10 @@
         {{-- Close Buttons --}}
         @if(config('adminlte.iframe.buttons.close_all', true) || config('adminlte.iframe.buttons.close_all_other', true))
 
-            <div class="nav-item dropdown">
-                <a class="nav-link bg-danger dropdown-toggle" data-toggle="dropdown" href="#"
-                   role="button" aria-haspopup="true" aria-expanded="false">
-                    {{ __('adminlte::iframe.btn_close') }}
-                </a>
-                <div class="dropdown-menu mt-0">
-                    @if(config('adminlte.iframe.buttons.close', false))
-                        <a class="dropdown-item" href="#" data-widget="iframe-close">
-                            {{ __('adminlte::iframe.btn_close_active') }}
-                        </a>
-                    @endif
-                    @if(config('adminlte.iframe.buttons.close_all', true))
-                        <a class="dropdown-item" href="#" data-widget="iframe-close" data-type="all">
-                            {{ __('adminlte::iframe.btn_close_all') }}
-                        </a>
-                    @endif
-                    @if(config('adminlte.iframe.buttons.close_all_other', true))
-                        <a class="dropdown-item" href="#" data-widget="iframe-close" data-type="all-other">
-                            {{ __('adminlte::iframe.btn_close_all_other') }}
-                        </a>
-                    @endif
-                </div>
-            </div>
-
         @elseif(config('adminlte.iframe.buttons.close', false))
 
             <a class="nav-link bg-danger" href="#" data-widget="iframe-close">
                  {{ __('adminlte::iframe.btn_close') }}
-            </a>
-
-        @endif
-
-        {{-- Scroll Left Button --}}
-        @if(config('adminlte.iframe.buttons.scroll_left', true))
-            <a class="nav-link bg-light" href="#" data-widget="iframe-scrollleft">
-                <i class="fas fa-angle-double-left"></i>
             </a>
         @endif
 
@@ -67,13 +35,6 @@
             @endif
 
         </ul>
-
-        {{-- Scroll Right Button --}}
-        @if(config('adminlte.iframe.buttons.scroll_right', true))
-            <a class="nav-link bg-light" href="#" data-widget="iframe-scrollright">
-                <i class="fas fa-angle-double-right"></i>
-            </a>
-        @endif
 
         {{-- Fullscreen Button --}}
         @if(config('adminlte.iframe.buttons.fullscreen', true))

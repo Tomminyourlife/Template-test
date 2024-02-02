@@ -16,4 +16,6 @@ return [
     'important'                     => 'Importante',
     'warning'                       => 'Avvertimento',
     'information'                   => 'Informazione',
+    'added'                         => 'AGGIUNTO',
+    'info'                          => 'Info'
 ];

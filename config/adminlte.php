@@ -324,7 +324,7 @@ return [
             'url'  => 'admin/settings',
             'icon' => 'fas fa-fw fa-user',
         ],
-        [
+        /*[
             'text' => 'change_password',
             'url'  => 'admin/settings',
             'icon' => 'fas fa-fw fa-lock',
@@ -368,7 +368,7 @@ return [
             ],
         ],
         ['header' => 'labels'],
-        [
+        /*[
             'text'       => 'important',
             'icon_color' => 'red',
             'url'        => '#',
@@ -382,6 +382,11 @@ return [
             'text'       => 'information',
             'icon_color' => 'cyan',
             'url'        => '#',
+        ],*/
+        ['header' => 'added'],
+        [
+            'text'       => 'info',
+            'url'        => '/admin/pages/about',
         ],
     ],
 

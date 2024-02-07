@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\PageController;
+use App\Http\Controllers\ChatbotController;
 
 
 /*
@@ -30,7 +30,7 @@ Route::get('/admin/settings/edit/{id}', [UserController::class, 'editUser'])->na
 Route::post('/admin/settings/update/{id}', [UserController::class, 'updateUser'])->name('admin.settings.update');
 
 
-Route::get('/admin/pages/about', [PageController::class, 'about'])->name('admin.pages.about');
+Route::get('/admin/pages/about', [ChatbotController::class, 'handle'])->name('chatbot');
 
 
 

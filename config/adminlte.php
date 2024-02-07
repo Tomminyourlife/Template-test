@@ -385,7 +385,7 @@ return [
         ],*/
         ['header' => 'added'],
         [
-            'text'       => 'info',
+            'text'       => 'Chatbot',
             'url'        => '/admin/pages/about',
         ],
     ],

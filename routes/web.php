@@ -30,6 +30,10 @@ Route::get('/admin/settings/edit/{id}', [UserController::class, 'editUser'])->na
 Route::post('/admin/settings/update/{id}', [UserController::class, 'updateUser'])->name('admin.settings.update');
 
 
+Route::get('/admin/pages/about', [ChatbotController::class, 'showChat'])->name('chat.show');
+Route::post('/admin/pages/about', [ChatbotController::class, 'handleChat'])->name('chat.handle');
+
+
 
 
 

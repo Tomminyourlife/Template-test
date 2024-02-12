@@ -9,6 +9,7 @@
         "botman/botman": "^2.8",
         "botman/driver-telegram": "^2.0",
         "botman/driver-web": "^1.5",
+        "google/cloud-dialogflow": "^1.11",
         "guzzlehttp/guzzle": "^7.2",
         "jeroennoten/laravel-adminlte": "^3.9",
         "laravel/framework": "^10.10",

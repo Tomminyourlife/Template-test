@@ -387,13 +387,15 @@ return [
         [
             'text'       => 'Chatbot',
             'url'        => '/admin/pages/about',
-            /*'submenu' => [
-                [
-                    'text' => 'level_one',
-                    'url'  => '#',
-                ],
-            ]*/
-        ]
+        ],
+        [
+            'text'       => 'Ticket',
+            'url'        => '/admin/pages/ticket',
+        ],
+        [
+            'text'       => 'AllTickets',
+            'url'        => '/admin/pages/alltickets',
+        ],
         
     ],
 

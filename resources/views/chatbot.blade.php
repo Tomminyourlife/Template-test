@@ -50,7 +50,7 @@
                 sendMessage() {
                     this.addMessage('You', this.message);
 
-                    axios.post('{{ route('chat.handle') }}', { message: this.message })
+                    axios.post("{{ route('chat.handle') }}", { message: this.message })
                         .then(response => {
                             this.addMessage('Chatbot', response.data.botResponse);
                             this.message = '';

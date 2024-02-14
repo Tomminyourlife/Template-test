@@ -384,7 +384,7 @@ return [
             'url'        => '#',
         ],*/
         ['header' => 'TICKETING'],
-        [
+        /*[
             'text'       => 'Chatbot',
             'url'        => '/admin/pages/about',
         ],

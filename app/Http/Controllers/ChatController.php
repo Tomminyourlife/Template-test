@@ -27,6 +27,5 @@ class ChatController extends Controller
         // Controlla se c'è una risposta predefinita per il messaggio dell'utente
         return $responses[$userMessage] ?? 'Non ho capito la tua domanda.';
 
-        // Puoi implementare logiche più complesse, ad esempio, con espressioni regolari
     }
 }

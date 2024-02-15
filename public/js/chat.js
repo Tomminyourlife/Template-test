@@ -9,7 +9,7 @@ new Vue({
             const userInput = this.chatInput;
 
             // Invia il messaggio al backend usando Axios
-            axios.post('/get-bot-response', { message: userInput })
+            axios.post('/', { message: userInput })
                 .then(response => {
                     // Aggiorna la cronologia della chat con la risposta del chatbot
                     this.chatHistory.push({ text: response.data.message, sender: 'bot' });

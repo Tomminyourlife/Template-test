@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 class WelcomeController extends Controller
 {
-    /**
+    /*
      * Display the welcome page.
      *
      * @return \Illuminate\Contracts\Support\Renderable

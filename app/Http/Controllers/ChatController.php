@@ -3,13 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Wit\Wit;
 
 class ChatController extends Controller
 {
+
     public function getBotResponse(Request $request){
         $userMessage = $request->input('message');
-
+        
         // Implementa la logica del chatbot qui
         $botResponse = $this->getCustomBotResponse($userMessage);
         // Restituisci una risposta fittizia per ora
@@ -22,7 +22,6 @@ class ChatController extends Controller
         $responses = [
             'Ciao' => 'Ciao! Come posso aiutarti?',
             'Come stai?' => 'Io sono solo un chatbot, ma grazie per chiedere!',
-            // Aggiungi altre risposte in base alle domande dell'utente
         ];
 
         // Controlla se c'è una risposta predefinita per il messaggio dell'utente

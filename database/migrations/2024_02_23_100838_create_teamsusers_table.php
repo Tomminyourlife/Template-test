@@ -13,18 +13,11 @@ class CreateTeamsUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create('team_user', function (Blueprint $table) {
+        Schema::create('teamsusers', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('team_id');
             $table->unsignedBigInteger('user_id');
             $table->timestamps();
-
-            // Chiavi esterne
-            //$table->foreign('team_id')->references('id')->on('teams')->onDelete('cascade');
-            //$table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-
-            // Eventuali altri campi necessari
-            // ...
         });
     }
 
@@ -35,7 +28,7 @@ class CreateTeamsUsersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('team_user');
+        Schema::dropIfExists('teamsusers');
     }
 }
 

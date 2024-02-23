@@ -14,7 +14,7 @@ Route::middleware(['web', 'auth'])->group(function () {
 });
 
 Route::get('/', [WelcomeController::class, 'index']);
-Route::post('/', [ChatController::class, 'getBotResponse']);
+Route::post('/check-vat', [WelcomeController::class, 'checkVat']);
 
 Auth::routes();
 

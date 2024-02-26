@@ -9,7 +9,7 @@
 
                     <div class="card-body">
                         <div id="chat-container">
-                            <div id="chat-header"><h4>Ciao <!--{{ $giacomo->nome }} --> !</h4></div>
+                            <div id="chat-header"><h4>Ciao!</h4></div>
                             <div id="chat-messages">
                                 <!-- Loop per mostrare i messaggi della chat -->
                                 <div v-for="message in chatHistory" :class="message.sender + '-message'" v-html="message.text">@{{ message.text }}</div>
@@ -100,5 +100,3 @@
         background-color: green;
     }
 </style>
-
-

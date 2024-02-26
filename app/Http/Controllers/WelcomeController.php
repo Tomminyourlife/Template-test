@@ -12,8 +12,8 @@ class WelcomeController extends Controller{
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function index(){
-        $giacomo = Customer::find(5519);
-        return view('welcome', compact('giacomo'));
+        //$giacomo = Customer::find(5519);
+        return view('welcome');//, compact('giacomo'));
     }
 
     public function checkVat(Request $request){
@@ -26,7 +26,7 @@ class WelcomeController extends Controller{
             $message = "Ciao $user->nome! Di cosa ha bisogno?";
             return response()->json(['message' => $message]);
         } else {
-            return response()->json(['message' => 'Siamo spiacenti, la partita IVA non è corretta o non fai parte dei nostri clienti']);
+            return response()->json(['message' => 'Siamo spiacenti, la partita IVA non è corretta o non fa parte dei nostri clienti']);
         }
     }
 }

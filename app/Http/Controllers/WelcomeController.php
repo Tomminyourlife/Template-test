@@ -13,7 +13,8 @@ class WelcomeController extends Controller{
      */
     public function index(){
         //$giacomo = Customer::find(5519);
-        return view('welcome');//, compact('giacomo'));
+        $categories = ['Assistenza Tecnica', 'Richieste di Rimborso', 'Altro'];
+        return view('welcome')->with('categories', $categories);  //, compact('giacomo'));
     }
 
     public function checkVat(Request $request){

@@ -3,8 +3,10 @@ new Vue({
     data: {
         chatHistory: [],
         chatInput: '',
+        isVatValid: false,
     },
     mounted() {
+        this.isVatValid= false;
         this.addBotMessage("Inserisci la tua partita IVA");
     },
     methods: {
@@ -16,12 +18,15 @@ new Vue({
                 // Effettua una richiesta al server per controllare la partita IVA nel database
                 return axios.post('/check-vat', { vat_number: userInput })
                     .then(response => {
+                        this.isVatValid= true;
                         return response.data.message; // Puoi gestire la risposta come desideri
                     })
                     .catch(error => {
+                        this.isVatValid= false;
                         console.error('Errore durante il controllo della partita IVA:', error);
                     });
             } else {
+                this.isVatValid= false;
                 return "Mi dispiace, non sembra essere una partita IVA valida. Per favore, fornisci una partita IVA corretta.";
             }
         },
@@ -61,11 +66,6 @@ new Vue({
                 // Invia un messaggio per chiedere la categoria del ticket
                 const formMessage = "Per favore, seleziona la categoria del ticket:";
                 this.addBotMessage(formMessage);
-
-                // Aggiungi un form per la scelta della categoria
-                const categories = ['Assistenza Tecnica', 'Richieste di Rimborso', 'Altro'];
-                const formOptions = categories.map(category => `<button @click="selectCategory('${category}')">${category}</button>`).join('');
-                this.addBotMessage(formOptions);
             }
 
             return null; // Nessun messaggio successivo da inviare
@@ -73,6 +73,10 @@ new Vue({
 
         selectCategory(category) {
             // Nascondi il form per la scelta della categoria
+            if (category) {
+                this.isVatValid= false;
+                console.log(category);
+              }
             this.isCategoryFormVisible = false;
 
             // Aggiungi il messaggio della categoria selezionata alla chatHistory

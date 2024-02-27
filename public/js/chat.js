@@ -4,6 +4,9 @@ new Vue({
         chatHistory: [],
         chatInput: '',
         isVatValid: false,
+        selectedCategory: '',
+        categorySaved: false, 
+        ticketCreated: false,
     },
     mounted() {
         this.isVatValid= false;
@@ -78,8 +81,24 @@ new Vue({
                 console.log(category);
               }
             this.isCategoryFormVisible = false;
+            
+            this.selectedCategory = category;
 
-            // Aggiungi il messaggio della categoria selezionata alla chatHistory
+            // Invia la categoria al server (puoi usare Axios o un'altra libreria)
+            axios.post('/save-category', { category: this.selectedCategory })
+                .then(response => {
+                    console.log('Categoria salvata con successo:', response.data);
+                    this.categorySaved = true;
+                    return axios.post('/create-ticket', { category: this.selectedCategory });
+                })
+                .then(ticketResponse => {
+                    console.log('Ticket creato con successo:', ticketResponse.data);
+                    this.ticketCreated = true;
+                })
+                .catch(error => {
+                    console.error('Errore durante il salvataggio della categoria o la creazione del ticket:', error);
+                });
+
             this.addBotMessage(`Hai selezionato la categoria: ${category}`);
 
             // Puoi fare ulteriori operazioni qui in base alla categoria selezionata
@@ -89,3 +108,4 @@ new Vue({
         },
     },
 });
+

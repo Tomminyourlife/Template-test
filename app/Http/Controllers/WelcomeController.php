@@ -30,4 +30,14 @@ class WelcomeController extends Controller{
             return response()->json(['message' => 'Siamo spiacenti, la partita IVA non è corretta o non fa parte dei nostri clienti']);
         }
     }
+
+    public function saveCategory(Request $request){
+        // Esegui il salvataggio della categoria (puoi sostituire questa logica con la tua)
+        // Ad esempio, puoi salvarlo nel database o nella sessione
+        $selectedCategory = $request->input('category');
+        
+        // Puoi fare ulteriori operazioni se necessario
+
+        return response()->json(['message' => 'Categoria salvata con successo']);
+    }
 }

@@ -14,6 +14,11 @@
                                 <!-- Loop per mostrare i messaggi della chat -->
                                 <div v-for="message in chatHistory" :class="message.sender + '-message'" v-html="message.text">@{{ message.text }}</div>
                             </div>
+                            <div v-if="isVatValid">
+                            @foreach($categories as $cat)
+                                <button @click="selectCategory('{{ $cat }}')">{{ $cat }}</button>
+                            @endforeach
+                            </div>
                             <div id="chat-input-container">
                                 <input type="text" v-model="chatInput" @keyup.enter="sendMessage" placeholder="Inserisci un messaggio...">
                                 <button @click="sendMessage">Invia</button>
@@ -25,7 +30,6 @@
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="{{ asset('js/chat.js') }}"></script>
 @endsection

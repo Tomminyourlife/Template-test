@@ -19,6 +19,11 @@
                                 <button @click="selectCategory('{{ $cat }}')">{{ $cat }}</button>
                             @endforeach
                             </div>
+                            <div v-if="selectedCategory">
+                                <p>Hai selezionato la categoria: @{{ selectedCategory }}</p>
+                                <p v-if="categorySaved">Categoria salvata con successo!</p>
+                                <p v-if="ticketCreated"><b>Ticket creato con successo!</b></p>
+                            </div>
                             <div id="chat-input-container">
                                 <input type="text" v-model="chatInput" @keyup.enter="sendMessage" placeholder="Inserisci un messaggio...">
                                 <button @click="sendMessage">Invia</button>

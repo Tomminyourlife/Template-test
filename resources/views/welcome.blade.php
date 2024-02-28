@@ -12,32 +12,53 @@
                             <div id="chat-header"><h4>Ciao!</h4></div>
                             <div id="chat-messages">
                                 <!-- Loop per mostrare i messaggi della chat -->
-                                <div v-for="message in chatHistory" :class="message.sender + '-message'" v-html="message.text">@{{ message.text }}</div>
+                                @foreach($chatHistory as $message)
+                                    <div class="{{ $message['sender'] }}-message">{!! $message['text'] !!}</div>
+                                @endforeach
                             </div>
-                            <div v-if="isVatValid">
-                            @foreach($categories as $cat)
-                                <button @click="selectCategory('{{ $cat }}')">{{ $cat }}</button>
-                            @endforeach
-                            </div>
-                            <div v-if="selectedCategory">
-                                <p>Hai selezionato la categoria: @{{ selectedCategory }}</p>
-                                <p v-if="categorySaved">Categoria salvata con successo!</p>
-                                <p v-if="ticketCreated"><b>Ticket creato con successo!</b></p>
-                            </div>
-                            <div id="chat-input-container">
-                                <input type="text" v-model="chatInput" @keyup.enter="sendMessage" placeholder="Inserisci un messaggio...">
-                                <button @click="sendMessage">Invia</button>
-                            </div>
+
+                            @if($isVatValid && !$selectedCategory)
+                                <form method="post" action="{{ route('save-category') }}">
+                                    @csrf
+                                    <label for="category">Seleziona la categoria:</label>
+                                    <select name="selectedCategory" id="category" required>
+                                        @foreach($categories as $cat)
+                                            <option value="{{ $cat }}">{{ $cat }}</option>
+                                        @endforeach
+                                    </select>
+                                    <br>
+                                    <label for="description">Descrizione:</label>
+                                    <textarea name="description" id="description" rows="4" required></textarea>
+                                    <br>
+                                    <button type="submit">Invia</button>
+                                </form>
+                            @endif
+
+                            @if ($selectedCategory)
+                                <p>Hai selezionato la categoria: {{ $selectedCategory }}</p>
+                                @if ($categorySaved)
+                                    <p>Categoria salvata con successo!</p>
+                                @endif
+                                @if ($ticketCreated)
+                                    <p><b>Ticket creato con successo!</b></p>
+                                @endif
+                            @endif
+
+                            <form method="post" action="{{ route('sendMessage') }}" >
+                                @csrf
+                                <div id="chat-input-container">
+                                    <input type="text" name="chatInput" placeholder="Inserisci un messaggio...">
+                                    <button type="submit">Invia</button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="{{ asset('js/chat.js') }}"></script>
 @endsection
+
 
 <style scoped>
     #chat-container {

@@ -14,9 +14,11 @@ Route::middleware(['web', 'auth'])->group(function () {
 });
 
 Route::get('/', [WelcomeController::class, 'index']);
-Route::post('/check-vat', [WelcomeController::class, 'checkVat']);
+Route::post('/check-vat', [WelcomeController::class, 'checkVat'])->name('checkVat');
 Route::post('/save-category', [WelcomeController::class, 'saveCategory']);
 Route::post('/create-ticket', [TicketController::class, 'createTicket']);
+
+//Route::get('/ticket/{id}', [TicketController::class, 'show'])->name('ticket.show');
 
 Auth::routes();
 

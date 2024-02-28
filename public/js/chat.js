@@ -1,4 +1,4 @@
-new Vue({
+/*new Vue({
     el: '#app',
     data: {
         chatHistory: [],
@@ -7,6 +7,8 @@ new Vue({
         selectedCategory: '',
         categorySaved: false, 
         ticketCreated: false,
+        description: '',
+        isCategoryFormVisible: false,
     },
     mounted() {
         this.isVatValid= false;
@@ -65,7 +67,8 @@ new Vue({
             if (previousBotResponse.includes('Ciao') && previousBotResponse.includes('Di cosa ha bisogno?')) {
                 // Se l'utente è riconosciuto, mostra il form per la scelta della categoria del ticket
                 this.isCategoryFormVisible = true;
-
+                console.log('isCategoryFormVisible:', this.isCategoryFormVisible);
+                
                 // Invia un messaggio per chiedere la categoria del ticket
                 const formMessage = "Per favore, seleziona la categoria del ticket:";
                 this.addBotMessage(formMessage);
@@ -81,23 +84,28 @@ new Vue({
                 console.log(category);
               }
             this.isCategoryFormVisible = false;
-            
             this.selectedCategory = category;
 
             // Invia la categoria al server (puoi usare Axios o un'altra libreria)
-            axios.post('/save-category', { category: this.selectedCategory })
-                .then(response => {
+            axios.post('/save-category', { 
+                category: this.selectedCategory,
+                description: this.description
+            })
+            .then(response => {
                     console.log('Categoria salvata con successo:', response.data);
                     this.categorySaved = true;
-                    return axios.post('/create-ticket', { category: this.selectedCategory });
-                })
-                .then(ticketResponse => {
+                    return axios.post('/create-ticket', { 
+                        category: this.selectedCategory,
+                        description: this.description
+                    });
+            })
+            .then(ticketResponse => {
                     console.log('Ticket creato con successo:', ticketResponse.data);
                     this.ticketCreated = true;
-                })
-                .catch(error => {
+            })
+            .catch(error => {
                     console.error('Errore durante il salvataggio della categoria o la creazione del ticket:', error);
-                });
+            });
 
             this.addBotMessage(`Hai selezionato la categoria: ${category}`);
 
@@ -107,5 +115,5 @@ new Vue({
             // Chiedi ulteriori informazioni o invia ulteriori messaggi, se necessario
         },
     },
-});
+});*/
 

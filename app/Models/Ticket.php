@@ -10,7 +10,7 @@ class Ticket extends Model
     protected $primaryKey = 'id'; 
     public $timestamps = true;
     protected $fillable = [
-        'title',
+        'category_id',
         'description',
         //file?
     ]; 

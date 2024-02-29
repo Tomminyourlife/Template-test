@@ -14,7 +14,7 @@ Route::middleware(['web', 'auth'])->group(function () {
 });
 
 Route::get('/', [WelcomeController::class, 'index']);
-Route::post('/send-message', [WelcomeController::class, 'sendMessage'])->name('sendMessage');
+Route::post('/', [WelcomeController::class, 'sendMessage'])->name('sendMessage');
 Route::post('/save-category', [WelcomeController::class, 'saveCategory'])->name('save-category');
 //Route::post('/create-ticket', [TicketController::class, 'createTicket']);
 

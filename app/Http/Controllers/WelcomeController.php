@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
+use App\Models\Ticket;
 use App\Models\Customer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
@@ -45,11 +47,11 @@ class WelcomeController extends Controller{
     $this->addBotMessage("Inserisci la tua partita IVA");
     }
 
-    public function isVatNumber($input){
+    /*public function isVatNumber($input){
         return preg_match('/^\d{11}$/', $input);
-    }
+    }*/
 
-    public function getBotResponse($userInput){
+    /*public function getBotResponse($userInput){
         if ($this->isVatNumber($userInput)) {
             try {
                 // Effettua una richiesta al server per controllare la partita IVA nel database
@@ -68,52 +70,68 @@ class WelcomeController extends Controller{
             $this->isVatValid = false;
             return "Mi dispiace, non sembra essere una partita IVA valida. Per favore, fornisci una partita IVA corretta.";
         }
-    }
+    }*/
 
     public function addBotMessage($message){
         $this->chatHistory[] = ['sender' => 'Bot', 'text' => $message];
     }
 
-    public function sendMessage(){
-        if (trim($this->chatInput) !== '') {
-            // Aggiungi il messaggio dell'utente alla chatHistory
-            $this->chatHistory[] = ['sender' => 'Utente', 'text' => $this->chatInput];
+    public function sendMessage(Request $request){
+        $chatHistory = [];
+        $categories = ['Assistenza Tecnica', 'Richieste di Rimborso', 'Altro'];
+        $isVatValid = false;
+        $selectedCategory = '';
+        $message = $request->input('chatInput');
 
-            // Ottieni la risposta del chatbot in base all'input dell'utente
-            try {
-                $botResponse = $this->getBotResponse($this->chatInput);
+        $pi = $message;
+        // Aggiorna la chat history
+        $chatHistory[] = ['sender' => 'Utente', 'text' => $message];
+        $isVatValid = false;
+        if (strlen($pi) === 11) {
+            
+            $isVatValid = true; 
 
-                $this->addBotMessage($botResponse);
+            if ($isVatValid) {
+                // Ottieni il nome associato alla partita IVA dal database
+                $customer = Customer::where('pi', $pi)->first();
 
-                $nextBotMessage = $this->getNextBotMessage($botResponse);
-                if ($nextBotMessage) {
-                    $this->addBotMessage($nextBotMessage);
+                if ($customer) {
+                    $botResponse = "Benvenuto, " . $customer->nome . "! Come posso aiutarti?";
+                } else {
+                    $isVatValid = false;
+                    $botResponse = "Partita IVA valida, ma nessun cliente trovato.";
                 }
-            } catch (\Exception $error) {
-                error_log('Errore durante la gestione della risposta del chatbot: ' . $error->getMessage());
+            } else {
+                $botResponse = "Mi dispiace, la partita IVA non è valida. Per favore, fornisci una partita IVA corretta.";
             }
-
-            // Resetta il campo di input
-            $this->chatInput = '';
+        } else {
+            $botResponse = "La partita IVA deve essere composta da 11 cifre. Per favore, inserisci una partita IVA corretta.";
         }
+
+        // Aggiorna la chat history con la risposta del bot
+        $chatHistory[] = ['sender' => 'Bot', 'text' => $botResponse];
+
+
+        // Ritorna alla vista con la chat history aggiornata
+        return view('welcome')->with(['chatHistory' => $chatHistory, 'isVatValid' => $isVatValid, 'selectedCategory' => $selectedCategory, 'categories' => $categories,]);
     }
 
-    public function getNextBotMessage($previousBotResponse){
-    if (strpos($previousBotResponse, 'Ciao') !== false && strpos($previousBotResponse, 'Di cosa ha bisogno?') !== false) {
-        // Se l'utente è riconosciuto, mostra il form per la scelta della categoria del ticket
-        $this->isCategoryFormVisible = true;
-        error_log('isCategoryFormVisible: ' . $this->isCategoryFormVisible);
 
-        // Invia un messaggio per chiedere la categoria del ticket
-        $formMessage = "Per favore, seleziona la categoria del ticket:";
-        $this->addBotMessage($formMessage);
-    }
+    /*public function getNextBotMessage($previousBotResponse){
+        if (strpos($previousBotResponse, 'Ciao') !== false && strpos($previousBotResponse, 'Di cosa ha bisogno?') !== false) {
+            // Se l'utente è riconosciuto, mostra il form per la scelta della categoria del ticket
+            $this->isCategoryFormVisible = true;
+            error_log('isCategoryFormVisible: ' . $this->isCategoryFormVisible);
 
-    return null; // Nessun messaggio successivo da inviare
-    }
+            // Invia un messaggio per chiedere la categoria del ticket
+            $formMessage = "Per favore, seleziona la categoria del ticket:";
+            $this->addBotMessage($formMessage);
+        }
 
-    public function selectCategory($category)
-    {
+        return null; // Nessun messaggio successivo da inviare
+    }*/
+
+    public function selectCategory($category){
         // Nascondi il form per la scelta della categoria
         if ($category) {
             $this->isVatValid = false;
@@ -152,27 +170,29 @@ class WelcomeController extends Controller{
         // Chiedi ulteriori informazioni o invia ulteriori messaggi, se necessario
     }
 
-    public function checkVat(Request $request){
-        $inputVat = $request->input('vat_number');
-
-        // Esegui il controllo nel database
-        $user = Customer::where('pi', $inputVat)->first();
-
-        if ($user) {
-            $message = "Ciao $user->nome! Di cosa ha bisogno?";
-            return response()->json(['message' => $message]);
-        } else {
-            return response()->json(['message' => 'Siamo spiacenti, la partita IVA non è corretta o non fa parte dei nostri clienti']);
-        }
-    }
-
     public function saveCategory(Request $request){
-        // Esegui il salvataggio della categoria (puoi sostituire questa logica con la tua)
-        // Ad esempio, puoi salvarlo nel database o nella sessione
-        $selectedCategory = $request->input('category');
-        
-        // Puoi fare ulteriori operazioni se necessario
+        $request->validate([
+            'selectedCategory' => 'required',
+            'description' => 'required',
+        ]);
+    
+        // Ottenere i dati dal form
+        $selectedCategory = $request->input('selectedCategory');
+        $description = $request->input('description');
+    
+        // Salvare i dati nel database utilizzando il tuo modello
+        Category::create([                       // mettere $category = ... per collegare ticket alla categoria
+            'name' => $selectedCategory,
+            'description' => $description,
+            // Altri campi del tuo modello, se presenti
+        ]);
 
-        return response()->json(['message' => 'Categoria salvata con successo']);
+        /*Ticket::create([
+            'category_id' => $category->id,   
+            'description' => $description,
+            // Altri campi del tuo modello Ticket, se presenti
+        ]);*/
+
+        return redirect()->back()->with('success', 'Dati salvati con successo!');
     }
 }

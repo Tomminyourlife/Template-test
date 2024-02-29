@@ -24,8 +24,7 @@ class WelcomeController extends Controller{
     public $isCategoryFormVisible = false;
     public $categories = ['Assistenza Tecnica', 'Richieste di Rimborso', 'Altro'];
 
-    public function index()
-    {
+    public function index(){
         // Altri codici del metodo index...
 
         return view('welcome', [
@@ -131,7 +130,7 @@ class WelcomeController extends Controller{
         return null; // Nessun messaggio successivo da inviare
     }*/
 
-    public function selectCategory($category){
+    /*public function selectCategory($category){
         // Nascondi il form per la scelta della categoria
         if ($category) {
             $this->isVatValid = false;
@@ -168,7 +167,7 @@ class WelcomeController extends Controller{
         // Ad esempio, puoi procedere con la creazione del ticket per quella categoria.
 
         // Chiedi ulteriori informazioni o invia ulteriori messaggi, se necessario
-    }
+    }*/
 
     public function saveCategory(Request $request){
         $request->validate([

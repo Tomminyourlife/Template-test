@@ -16,7 +16,11 @@
                                     <div class="{{ $message['sender'] }}-message">{!! $message['text'] !!}</div>
                                 @endforeach
                             </div>
-
+                            @if(session('success'))
+                                <div class="success-message">
+                                    {{ session('success') }}
+                                </div>
+                            @endif
                             @if($isVatValid && !$selectedCategory)
                                 <form method="post" action="{{ route('save-category') }}">
                                     @csrf

@@ -17,7 +17,6 @@ Route::get('/', [WelcomeController::class, 'index']);
 Route::post('/', [WelcomeController::class, 'sendMessage'])->name('sendMessage');
 Route::post('/save-category', [WelcomeController::class, 'saveCategory'])->name('save-category');
 //Route::post('/create-ticket', [TicketController::class, 'createTicket']);
-
 //Route::get('/ticket/{id}', [TicketController::class, 'show'])->name('ticket.show');
 
 Auth::routes();

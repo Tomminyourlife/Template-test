@@ -22,16 +22,16 @@
                                 </div>
                             @endif
                             @if($isVatValid && !$selectedCategory)
-                                <form method="post" action="{{ route('save-category') }}">
+                                <form id="category-form" method="post" action="{{ route('save-category') }}">
                                     @csrf
-                                    <label for="category">Seleziona la categoria:</label>
+                                    <label for="category"><b>Seleziona la categoria:</b></label>
                                     <select name="selectedCategory" id="category" required>
                                         @foreach($categories as $cat)
                                             <option value="{{ $cat }}">{{ $cat }}</option>
                                         @endforeach
                                     </select>
                                     <br>
-                                    <label for="description">Descrizione:</label>
+                                    <label for="description"><b>Descrizione:</b></label>
                                     <textarea name="description" id="description" rows="4" required></textarea>
                                     <br>
                                     <button type="submit">Invia</button>
@@ -125,4 +125,36 @@
     #chat-input-container button:hover {
         background-color: green;
     }
+
+    #category-form {
+        width: 60%; /* Larghezza del form */
+        margin: 0 auto; /* Centra il form nella pagina */
+        font-size: 16px; 
+    }
+
+    #category-form label {
+        display: block; 
+        margin-bottom: 8px; 
+    }
+
+    #category-form select,
+    #category-form textarea {
+        width: 100%; /* Riempi l'intera larghezza del contenitore */
+        padding: 8px; /* Spaziatura interna dei campi */
+        margin-bottom: 16px; 
+    }
+
+    #category-form button {
+        background-color: #4caf50; 
+        color: white; 
+        padding: 10px 15px; 
+        font-size: 18px; 
+        border: solid; 
+        cursor: pointer; /* Cambia il cursore al passaggio del mouse sul pulsante */
+    }
+
+    #category-form button:hover {
+        background-color: green; 
+    }
+
 </style>

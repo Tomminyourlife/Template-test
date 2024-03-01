@@ -25,7 +25,6 @@ class WelcomeController extends Controller{
     public $categories = ['Assistenza Tecnica', 'Richieste di Rimborso', 'Altro'];
 
     public function index(){
-        // Altri codici del metodo index...
 
         return view('welcome', [
             'categories' => $this->categories,
@@ -37,7 +36,6 @@ class WelcomeController extends Controller{
             'ticketCreated' => $this->ticketCreated,
             'description' => $this->description,
             'isCategoryFormVisible' => $this->isCategoryFormVisible,
-            // Altre variabili...
         ]);
     }
 
@@ -95,7 +93,7 @@ class WelcomeController extends Controller{
                 $customer = Customer::where('pi', $pi)->first();
 
                 if ($customer) {
-                    $botResponse = "Benvenuto, " . $customer->nome . "! Come posso aiutarti?";
+                    $botResponse = "Benvenuto " . $customer->nome . "! Come posso aiutarti?";
                 } else {
                     $isVatValid = false;
                     $botResponse = "Partita IVA valida, ma nessun cliente trovato.";
@@ -185,6 +183,9 @@ class WelcomeController extends Controller{
             'description' => $description,
             // Altri campi del tuo modello, se presenti
         ]);
+
+        // Trovare il team associato alla categoria (potrebbe essere implementato diversamente a seconda delle tue esigenze)
+        //$team = Team::where('name', 'like', "%$selectedCategory%")->first();
 
         /*Ticket::create([
             'category_id' => $category->id,   

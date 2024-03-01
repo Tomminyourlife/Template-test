@@ -11,4 +11,9 @@ class Team extends Model
     {
         return $this->hasMany(Category::class);
     }
+
+    // Relazione molti a molti con il modello User
+    public function users() {
+        return $this->belongsToMany(User::class, 'teamsusers');
+    }
 }

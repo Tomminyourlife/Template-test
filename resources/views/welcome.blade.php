@@ -37,16 +37,8 @@
                                     <button type="submit">Invia</button>
                                 </form>
                             @endif
+                            
 
-                            @if ($selectedCategory)
-                                <p>Hai selezionato la categoria: {{ $selectedCategory }}</p>
-                                @if ($categorySaved)
-                                    <p>Categoria salvata con successo!</p>
-                                @endif
-                                @if ($ticketCreated)
-                                    <p><b>Ticket creato con successo!</b></p>
-                                @endif
-                            @endif
 
                             <form method="post" action="{{ route('sendMessage') }}" >
                                 @csrf

@@ -32,13 +32,24 @@
                                     </select>
                                     <br>
                                     <label for="description"><b>Descrizione:</b></label>
-                                    <textarea name="description" id="description" rows="4" required></textarea>
+                                    <textarea name="description" id="description" rows="4" required>{{ $description }}</textarea>
                                     <br>
                                     <button type="submit">Invia</button>
                                 </form>
                             @endif
                             
-
+                            @if($categorySaved && !$ticketCreated)
+                                <form id="ticket-form" method="post" action="{{ route('save-ticket') }}" enctype="multipart/form-data">
+                                    @csrf
+                                    <input type="hidden" name="selectedCategory" value="{{ $selectedCategory }}">
+                                    <input type="hidden" name="description" value="{{ $description }}">
+                                    <!-- Altri campi del form per il ticket, ad esempio allegati -->
+                                    <label for="attachments"><b>Allegati:</b></label>
+                                    <input type="file" name="attachments[]" multiple>
+                                    <br>
+                                    <button type="submit">Crea Ticket</button>
+                                </form>
+                            @endif
 
                             <form method="post" action="{{ route('sendMessage') }}" >
                                 @csrf
@@ -155,6 +166,40 @@
 
     #category-form button:hover {
         background-color: green; 
+    }
+    
+    /* Stile generale del form del ticket */
+    #ticket-form {
+        margin-top: 20px;
+        margin-left: 70px;
+        margin-right: auto;
+        max-width: 400px;
+    }
+
+    /* Stile del label */
+    #ticket-form label {
+        display: block;
+        margin-bottom: 8px;
+    }
+
+    /* Stile dell'input di tipo file */
+    #ticket-form input[type="file"] {
+        margin-bottom: 12px;
+    }
+
+    /* Stile del bottone di invio */
+    #ticket-form button {
+        background-color: #4caf50;
+        color: #ffffff;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    /* Hover del bottone di invio */
+    #ticket-form button:hover {
+        background-color: green;
     }
 
 </style>

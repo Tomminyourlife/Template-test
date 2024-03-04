@@ -40,33 +40,12 @@ class WelcomeController extends Controller{
     }
 
     public function __construct(){
-    $this->isVatValid = false;
-    $this->addBotMessage("Inserisci la tua partita IVA");
+        $this->isVatValid = false;
+        $this->addBotMessage("Inserisci la tua partita IVA");
     }
 
     /*public function isVatNumber($input){
         return preg_match('/^\d{11}$/', $input);
-    }*/
-
-    /*public function getBotResponse($userInput){
-        if ($this->isVatNumber($userInput)) {
-            try {
-                // Effettua una richiesta al server per controllare la partita IVA nel database
-                $response = Customer::post('/check-vat', ['vat_number' => $userInput]);
-
-                $data = json_decode($response, true);
-
-                $this->isVatValid = true;
-
-                return $data['message']; // Puoi gestire la risposta come desideri
-            } catch (\Exception $error) {
-                $this->isVatValid = false;
-                error_log('Errore durante il controllo della partita IVA: ' . $error->getMessage());
-            }
-        } else {
-            $this->isVatValid = false;
-            return "Mi dispiace, non sembra essere una partita IVA valida. Per favore, fornisci una partita IVA corretta.";
-        }
     }*/
 
     public function addBotMessage($message){
@@ -79,6 +58,7 @@ class WelcomeController extends Controller{
         $isVatValid = false;
         $selectedCategory = '';
         $message = $request->input('chatInput');
+        $description = '';
 
         $pi = $message;
         // Aggiorna la chat history
@@ -110,70 +90,44 @@ class WelcomeController extends Controller{
 
 
         // Ritorna alla vista con la chat history aggiornata
-        return view('welcome')->with(['chatHistory' => $chatHistory, 'isVatValid' => $isVatValid, 'selectedCategory' => $selectedCategory, 'categories' => $categories,]);
-    }
-
-
-    /*public function getNextBotMessage($previousBotResponse){
-        if (strpos($previousBotResponse, 'Ciao') !== false && strpos($previousBotResponse, 'Di cosa ha bisogno?') !== false) {
-            // Se l'utente è riconosciuto, mostra il form per la scelta della categoria del ticket
-            $this->isCategoryFormVisible = true;
-            error_log('isCategoryFormVisible: ' . $this->isCategoryFormVisible);
-
-            // Invia un messaggio per chiedere la categoria del ticket
-            $formMessage = "Per favore, seleziona la categoria del ticket:";
-            $this->addBotMessage($formMessage);
-        }
-
-        return null; // Nessun messaggio successivo da inviare
-    }*/
-
-    /*public function selectCategory($category){
-        // Nascondi il form per la scelta della categoria
-        if ($category) {
-            $this->isVatValid = false;
-            error_log($category);
-        }
-
-        $this->isCategoryFormVisible = false;
-        $this->selectedCategory = $category;
-
-        // Invia la categoria al server (puoi usare Axios o un'altra libreria)
-        try {
-            $response = Http::post('/save-category', [
-                'category' => $this->selectedCategory,
-                'description' => $this->description,
-            ]);
-
-            error_log('Categoria salvata con successo: ' . $response['data']);
+        //return view('welcome')->with(['chatHistory' => $chatHistory, 'isVatValid' => $isVatValid, 'selectedCategory' => $selectedCategory, 'categories' => $categories,]);
+        
+        if ($isVatValid && $selectedCategory && $description) {
+            // Imposta le variabili di stato per indicare la creazione del ticket
+            $this->isCategoryFormVisible = false;
             $this->categorySaved = true;
-
-            $ticketResponse = Http::post('/create-ticket', [
-                'category' => $this->selectedCategory,
-                'description' => $this->description,
-            ]);
-
-            error_log('Ticket creato con successo: ' . $ticketResponse['data']);
             $this->ticketCreated = true;
-        } catch (\Exception $error) {
-            error_log('Errore durante il salvataggio della categoria o la creazione del ticket: ' . $error->getMessage());
+    
+            // Aggiorna la chat history con un messaggio di conferma
+            $botResponse = "La categoria è stata selezionata e la descrizione è stata fornita. Ora puoi creare il ticket.";
+            $chatHistory[] = ['sender' => 'Bot', 'text' => $botResponse];
+
+
         }
-
-        $this->addBotMessage("Hai selezionato la categoria: $category");
-
-        // Puoi fare ulteriori operazioni qui in base alla categoria selezionata
-        // Ad esempio, puoi procedere con la creazione del ticket per quella categoria.
-
-        // Chiedi ulteriori informazioni o invia ulteriori messaggi, se necessario
-    }*/
-
+    
+        // Ritorna alla vista con la chat history aggiornata
+        return view('welcome')->with([
+            'chatHistory' => $chatHistory,
+            'isVatValid' => $isVatValid,
+            'selectedCategory' => $selectedCategory,
+            'categories' => $categories,
+            'isCategoryFormVisible' => $this->isCategoryFormVisible,
+            'categorySaved' => $this->categorySaved,
+            'ticketCreated' => $this->ticketCreated,
+            'description' => $this->description,
+        ]);
+    }
+    
     public function saveCategory(Request $request){
+        //dd($request->all());
         $request->validate([
             'selectedCategory' => 'required',
             'description' => 'required',
         ]);
     
         // Ottenere i dati dal form
+        $categories = ['Assistenza Tecnica', 'Richieste di Rimborso', 'Altro'];
+        $isVatValid = true;
         $selectedCategory = $request->input('selectedCategory');
         $description = $request->input('description');
     
@@ -184,15 +138,76 @@ class WelcomeController extends Controller{
             // Altri campi del tuo modello, se presenti
         ]);
 
-        // Trovare il team associato alla categoria (potrebbe essere implementato diversamente a seconda delle tue esigenze)
-        //$team = Team::where('name', 'like', "%$selectedCategory%")->first();
+        $chatHistory = $this->chatHistory;
 
-        /*Ticket::create([
-            'category_id' => $category->id,   
+        if ($isVatValid && $selectedCategory && $description) {
+            // Imposta le variabili di stato per indicare la creazione del ticket
+            $this->isCategoryFormVisible = false;
+            $this->categorySaved = true;
+            $this->ticketCreated = true;
+    
+            // Aggiorna la chat history con un messaggio di conferma
+            $botResponse = "La categoria è stata selezionata. Ora puoi creare il ticket aggiungendo se vuoi degli allegati.";
+            $chatHistory[] = ['sender' => 'Bot', 'text' => $botResponse];
+            
+            $this->categorySaved = true;
+            $this->ticketCreated = false;
+            $this->description = $description;
+        }
+    
+        // Aggiorna la chat history con la risposta del bot
+        // Ritorna alla vista con la chat history aggiornata
+        return view('welcome')->with([
+            'chatHistory' => $chatHistory,
+            'isVatValid' => $isVatValid,
+            'selectedCategory' => $selectedCategory,
+            'categories' => $categories,
+            'isCategoryFormVisible' => $this->isCategoryFormVisible,
+            'categorySaved' => $this->categorySaved,
+            'ticketCreated' => $this->ticketCreated,
+            'description' => $this->description,
+        ]);
+        //return redirect()->back()->with('success', 'Dati salvati con successo!');
+    }
+
+    public function saveTicket(Request $request){
+        //dd($request->all());
+        $request->validate([
+            'selectedCategory' => 'required',
+            'description' => 'required',
+            'attachments.*' => 'mimes:jpeg,png,pdf,docx|max:2048',
+            // Altri campi del form per il ticket, ad esempio allegati
+        ]);
+        // Ottenere i dati dal form
+        $selectedCategory = $request->input('selectedCategory');
+        $description = $request->input('description');
+        // Altri campi del form per il ticket, ad esempio allegati
+        //$message = $request->input('chatInput');
+        
+
+        //$pi = $message;
+        //$customer = Customer::where('pi', $pi)->first();
+        // Salvare il ticket nel database utilizzando il tuo modello
+        $ticket = Ticket::create([
+            'category' => $selectedCategory,
             'description' => $description,
-            // Altri campi del tuo modello Ticket, se presenti
-        ]);*/
+            //'user_id' => $customer->id,
+            // Altri campi del tuo modello, se presenti
+        ]);
 
-        return redirect()->back()->with('success', 'Dati salvati con successo!');
+        if ($request->hasFile('attachments')) {
+            foreach ($request->file('attachments') as $attachment) {
+                // Salva l'allegato sul disco
+                $path = $attachment->store('attachments', 'public');
+    
+                // Crea una relazione tra il ticket e l'allegato
+                $ticket->attachments()->create([
+                    'path' => $path,
+                    // Altri campi del modello dell'allegato, se necessario
+                ]);
+            }
+        }
+    
+        return redirect()->back()->with('success', 'Ticket creato con successo!');
     }
 }

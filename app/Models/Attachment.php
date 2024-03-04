@@ -9,6 +9,7 @@ class Attachment extends Model
     protected $fillable = [
         'ticket_id',
         'filename',
+        'path'
         // Aggiungi altri campi per la gestione degli allegati, se necessario
     ];
 

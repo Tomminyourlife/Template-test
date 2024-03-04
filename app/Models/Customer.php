@@ -10,4 +10,8 @@ class Customer extends Model
     use HasFactory;
 
     protected $table = '2022_customers';
+
+    /*public function tickets(){
+        return $this->hasMany(Ticket::class);
+    }*/
 }

@@ -4,7 +4,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WelcomeController;
-use App\Http\Controllers\TicketController;
 
 
 Route::middleware(['web', 'auth'])->group(function () {
@@ -16,8 +15,7 @@ Route::middleware(['web', 'auth'])->group(function () {
 Route::get('/', [WelcomeController::class, 'index']);
 Route::post('/', [WelcomeController::class, 'sendMessage'])->name('sendMessage');
 Route::post('/save-category', [WelcomeController::class, 'saveCategory'])->name('save-category');
-//Route::post('/create-ticket', [TicketController::class, 'createTicket']);
-//Route::get('/ticket/{id}', [TicketController::class, 'show'])->name('ticket.show');
+Route::post('/save-ticket', [WelcomeController::class, 'saveTicket'])->name('save-ticket');
 
 Auth::routes();
 

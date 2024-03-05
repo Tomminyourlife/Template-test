@@ -74,6 +74,7 @@ class WelcomeController extends Controller{
 
                 if ($customer) {
                     $botResponse = "Benvenuto " . $customer->nome . "! Come posso aiutarti?";
+                    session(['customerId' => $customer->id]);
                 } else {
                     $isVatValid = false;
                     $botResponse = "Partita IVA valida, ma nessun cliente trovato.";
@@ -178,22 +179,20 @@ class WelcomeController extends Controller{
             'attachments.*' => 'mimes:jpeg,png,pdf,docx|max:2048',
             // Altri campi del form per il ticket, ad esempio allegati
         ]);
+
+        $customerId = session('customerId');
         // Ottenere i dati dal form
         $selectedCategory = $request->input('selectedCategory');
         $description = $request->input('description');
         // Altri campi del form per il ticket, ad esempio allegati
-        //$message = $request->input('chatInput');
-        
-
-        //$pi = $message;
-        //$customer = Customer::where('pi', $pi)->first();
         // Salvare il ticket nel database utilizzando il tuo modello
         $ticket = Ticket::create([
             'category' => $selectedCategory,
             'description' => $description,
-            //'user_id' => $customer->id,
+            'customer_id' => $customerId,
             // Altri campi del tuo modello, se presenti
         ]);
+        //dd($request->all(), $ticket);
 
         if ($request->hasFile('attachments')) {
             foreach ($request->file('attachments') as $attachment) {
@@ -205,6 +204,7 @@ class WelcomeController extends Controller{
                     'path' => $path,
                     // Altri campi del modello dell'allegato, se necessario
                 ]);
+                //$ticket->attachments()->save($attachment);
             }
         }
     

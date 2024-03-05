@@ -11,7 +11,7 @@ class Customer extends Model
 
     protected $table = '2022_customers';
 
-    /*public function tickets(){
-        return $this->hasMany(Ticket::class);
-    }*/
+    public function tickets(){
+        return $this->hasMany(Ticket::class, 'customer_id');
+    }
 }

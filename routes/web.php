@@ -15,7 +15,7 @@ Route::middleware(['web', 'auth'])->group(function () {
 Route::get('/', [WelcomeController::class, 'index']);
 Route::post('/', [WelcomeController::class, 'sendMessage'])->name('sendMessage');
 Route::post('/save-category', [WelcomeController::class, 'saveCategory'])->name('save-category');
-Route::post('/save-ticket', [WelcomeController::class, 'saveTicket'])->name('save-ticket');
+//Route::post('/save-ticket', [WelcomeController::class, 'saveTicket'])->name('save-ticket');
 
 Auth::routes();
 

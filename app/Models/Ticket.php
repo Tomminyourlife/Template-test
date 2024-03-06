@@ -13,7 +13,7 @@ class Ticket extends Model
         'customer_id',
         'category_id',
         'description',
-        //file?
+        'attachments',
     ]; 
 
     /*protected $casts = [
@@ -28,11 +28,11 @@ class Ticket extends Model
     }*/
 
     public function category(){
-        return $this->belongsTo(Category::class);
+        return $this->belongsTo(Category::class, 'category_id');
     }
 
     public function attachments(){
-        return $this->hasMany(Attachment::class, 'attachment_id');
+        return $this->hasMany(Attachment::class, 'ticket_id');
     }
 
     public function customer(){

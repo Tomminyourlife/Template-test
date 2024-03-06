@@ -8,14 +8,12 @@ class Attachment extends Model
 {
     protected $fillable = [
         'ticket_id',
-        'filename',
-        'path'
-        // Aggiungi altri campi per la gestione degli allegati, se necessario
+        'path',
     ];
 
     public function ticket()
     {
-        return $this->belongsTo(Ticket::class, 'attachment_id');
+        return $this->belongsTo(Ticket::class, 'ticket_id');
     }
 }
 

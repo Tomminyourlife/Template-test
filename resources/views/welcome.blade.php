@@ -22,7 +22,7 @@
                                 </div>
                             @endif
                             @if($isVatValid && !$selectedCategory)
-                                <form id="category-form" method="post" action="{{ route('save-category') }}">
+                                <form id="category-form" method="post" action="{{ route('save-category') }}" enctype="multipart/form-data">
                                     @csrf
                                     <label for="category"><b>Seleziona la categoria:</b></label>
                                     <select name="selectedCategory" id="category" required>
@@ -35,7 +35,7 @@
                                     <textarea name="description" id="description" rows="4" required>{{ $description }}</textarea>
                                     <br>
                                     <label for="attachments"><b>Allegati:</b></label>
-                                    <input type="file" name="attachments[]" multiple>
+                                    <input type="file" name="attachments" multiple>
                                     <button type="submit">Crea Ticket</button>
                                 </form>
                             @endif

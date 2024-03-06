@@ -34,19 +34,8 @@
                                     <label for="description"><b>Descrizione:</b></label>
                                     <textarea name="description" id="description" rows="4" required>{{ $description }}</textarea>
                                     <br>
-                                    <button type="submit">Invia</button>
-                                </form>
-                            @endif
-                            
-                            @if($categorySaved && !$ticketCreated)
-                                <form id="ticket-form" method="post" action="{{ route('save-ticket') }}" enctype="multipart/form-data">
-                                    @csrf
-                                    <input type="hidden" name="selectedCategory" value="{{ $selectedCategory }}">
-                                    <input type="hidden" name="description" value="{{ $description }}">
-                                    <!-- Altri campi del form per il ticket, ad esempio allegati -->
                                     <label for="attachments"><b>Allegati:</b></label>
                                     <input type="file" name="attachments[]" multiple>
-                                    <br>
                                     <button type="submit">Crea Ticket</button>
                                 </form>
                             @endif

@@ -13,20 +13,8 @@ class Ticket extends Model
         'customer_id',
         'category_id',
         'description',
-        'attachments',
     ]; 
-
-    /*protected $casts = [
-        'attachments' => 'array',
-    ];
-
-    public function addAttachment($path){
-        $attachments = $this->attachments ?? [];
-        $attachments[] = $path;
-        $this->attachments = $attachments;
-        $this->save();
-    }*/
-
+    
     public function category(){
         return $this->belongsTo(Category::class, 'category_id');
     }

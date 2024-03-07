@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Models\Attachment;
 use App\Models\Category;
 use App\Models\Ticket;
 use App\Models\Customer;
@@ -119,37 +119,30 @@ class WelcomeController extends Controller{
             'description' => 'required',
             'attachments.*' => 'mimes:jpeg,png,pdf,docx|max:2048',
         ]);
-        
-        // Ottenere i dati dal form
+        //dd($request->file('attachments'));
+
         $categories = ['Assistenza Tecnica', 'Richieste di Rimborso', 'Altro'];
         $isVatValid = true;
         $selectedCategory = $request->input('selectedCategory');
         $description = $request->input('description');
         $customerId = session('customerId');
-        
+
         $category = Category::create([
             'name' => $selectedCategory,
             'description' => $description,
         ]);
         
         $chatHistory = $this->chatHistory;
-
         $ticket = Ticket::create([
             'category_id' => $category->id,
             'description' => $description,
             'customer_id' => $customerId,
         ]);
-        
-        if ($request->hasFile('attachments')) {
-            foreach ($request->file('attachments') as $attachment) {
-                // Salva l'allegato sul disco
-                $path = $attachment->store('attachments', 'public');
 
-                // Crea una relazione tra il ticket e l'allegato
-                $ticket->attachments()->create([
-                    'path' => $path,
-                ]);
-            }
+        if ($request->hasFile('attachments')) {
+             $path = $request->file('attachments')->store('attachments', 'public');
+            $ticketAttachment = new Attachment(['path' => $path]);
+            $ticket->attachments()->save($ticketAttachment);
         }
 
         // Imposta le variabili di stato per indicare la creazione del ticket
@@ -165,9 +158,10 @@ class WelcomeController extends Controller{
     }
 
     public function showSummary($ticketId){
+
         $ticket = Ticket::findOrFail($ticketId);
         $attachments = $ticket->attachments;
-        //dd($ticket->attachments);
+        
         return view('summary', compact('ticket', 'attachments' ));
     }
 }

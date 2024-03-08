@@ -84,20 +84,6 @@ class WelcomeController extends Controller{
 
         // Aggiorna la chat history con la risposta del bot
         $chatHistory[] = ['sender' => 'Bot', 'text' => $botResponse];
-
-        
-        if ($isVatValid && $selectedCategory && $description) {
-            // Imposta le variabili di stato per indicare la creazione del ticket
-            $this->isCategoryFormVisible = false;
-            $this->categorySaved = true;
-            $this->ticketCreated = true;
-    
-            // Aggiorna la chat history con un messaggio di conferma
-            $botResponse = "La categoria è stata selezionata e la descrizione è stata fornita. Ora puoi creare il ticket.";
-            $chatHistory[] = ['sender' => 'Bot', 'text' => $botResponse];
-
-
-        }
     
         // Ritorna alla vista con la chat history aggiornata
         return view('welcome')->with([
@@ -119,7 +105,6 @@ class WelcomeController extends Controller{
             'description' => 'required',
             'attachments.*' => 'mimes:jpeg,png,pdf,docx|max:2048',
         ]);
-        //dd($request->file('attachments'));
 
         $categories = ['Assistenza Tecnica', 'Richieste di Rimborso', 'Altro'];
         $isVatValid = true;

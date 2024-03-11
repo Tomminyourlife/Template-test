@@ -14,9 +14,8 @@ class Category extends Model{
         'description',
     ]; 
 
-    // Definisci la relazione tra la categoria e i team
     public function team(){
-        return $this->belongsTo(Team::class);
+        return $this->belongsToMany(Team::class, 'category_team', 'category_id', 'team_id');
     }
 
     public function tickets(){

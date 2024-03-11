@@ -43,7 +43,8 @@
                             <form method="post" action="{{ route('sendMessage') }}" >
                                 @csrf
                                 <div id="chat-input-container">
-                                    <input type="text" name="chatInput" placeholder="Inserisci un messaggio...">
+                                    <input type="text" name="chatInput" placeholder="Partita IVA">
+                                    <input type="text" name="phoneInput" placeholder="Ultime 3 cifre del numero di cellulare" />
                                     <button type="submit">Invia</button>
                                 </div>
                             </form>
@@ -54,7 +55,6 @@
         </div>
     </div>
 @endsection
-
 
 <style scoped>
     #chat-container {

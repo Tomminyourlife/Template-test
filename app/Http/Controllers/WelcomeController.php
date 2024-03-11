@@ -122,10 +122,17 @@ class WelcomeController extends Controller{
             'category_id' => $category->id,
             'description' => $description,
             'customer_id' => $customerId,
+            'title' => $selectedCategory,
         ]);
 
+         // Ottenere il team associato alla categoria
+        $team = $category->teams;
+
+        // Assegna il team al ticket
+        $ticket->team()->associate($team)->save();
+
         if ($request->hasFile('attachments')) {
-             $path = $request->file('attachments')->store('attachments', 'public');
+            $path = $request->file('attachments')->store('attachments', 'public');
             $ticketAttachment = new Attachment(['path' => $path]);
             $ticket->attachments()->save($ticketAttachment);
         }
@@ -145,7 +152,7 @@ class WelcomeController extends Controller{
     public function showSummary($ticketId){
 
         $ticket = Ticket::findOrFail($ticketId);
-        $attachments = $ticket->attachments;
+        $attachments = $ticket->attachments()->get();
         
         return view('summary', compact('ticket', 'attachments' ));
     }

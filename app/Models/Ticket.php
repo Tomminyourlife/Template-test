@@ -26,4 +26,8 @@ class Ticket extends Model
     public function customer(){
         return $this->belongsTo(Customer::class, 'customer_id');
     }
+
+    public function team(){
+    return $this->belongsTo(Team::class);
+    }
 }

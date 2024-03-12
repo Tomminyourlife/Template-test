@@ -14,4 +14,8 @@ class Customer extends Model
     public function tickets(){
         return $this->hasMany(Ticket::class, 'customer_id');
     }
+
+    public function emails(){
+        return $this->hasMany(CustomerEmail::class);
+    }
 }

@@ -5,6 +5,7 @@ use App\Models\Attachment;
 use App\Models\Category;
 use App\Models\Ticket;
 use App\Models\Customer;
+use App\Models\CustomerEmail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
@@ -41,7 +42,7 @@ class WelcomeController extends Controller{
 
     public function __construct(){
         $this->isVatValid = false;
-        $this->addBotMessage("Inserisci la tua partita IVA");
+        $this->addBotMessage("Inserisci la tua Partita IVA");
     }
 
     public function addBotMessage($message){
@@ -52,25 +53,37 @@ class WelcomeController extends Controller{
         $chatHistory = [];
         $categories = ['Assistenza Tecnica', 'Richieste di Rimborso', 'Altro'];
         $isVatValid = false;
+        $isEmailValid = false;
+        $isEmailCompleted = session('isEmailCompleted', false);
         $selectedCategory = '';
         $message = $request->input('chatInput');
+        $email = $request->input('emailInput');
         $description = '';
 
         $pi = $message;
-        // Aggiorna la chat history
         $chatHistory[] = ['sender' => 'Utente', 'text' => $message];
         $isVatValid = false;
+
         if (strlen($pi) === 11) {
-            
             $isVatValid = true; 
 
             if ($isVatValid) {
-                // Ottieni il nome associato alla partita IVA dal database
                 $customer = Customer::where('pi', $pi)->first();
 
                 if ($customer) {
-                    $botResponse = "Benvenuto " . $customer->nome . "! Come posso aiutarti?";
-                    session(['customerId' => $customer->id]);
+                    $customerEmail = CustomerEmail::where('customer_id', $customer->id)->first();
+
+                    if ($customerEmail) {
+                        $isEmailValid = true;
+                        $prefix = substr($customerEmail->email, 0, 2);
+                        $suffix = substr($customerEmail->email, -2);
+                        $botResponse = "Benvenuto " . $customer->nome . "! Completa l'indirizzo email. Suggerimento: " . $prefix . "****@****" . $suffix;
+                        $isEmailCompleted = true;
+                        session(['customerId' => $customer->id, 'emailPrefix' => $prefix, 'emailSuffix' => $suffix, 'isEmailCompleted' => $isEmailCompleted]);
+                    } else {
+                        $isVatValid = false;
+                        $botResponse = "Partita IVA valida, ma nessun indirizzo email trovato per questo cliente.";
+                    }
                 } else {
                     $isVatValid = false;
                     $botResponse = "Partita IVA valida, ma nessun cliente trovato.";
@@ -82,13 +95,13 @@ class WelcomeController extends Controller{
             $botResponse = "La partita IVA deve essere composta da 11 cifre. Per favore, inserisci una partita IVA corretta.";
         }
 
-        // Aggiorna la chat history con la risposta del bot
         $chatHistory[] = ['sender' => 'Bot', 'text' => $botResponse];
-    
-        // Ritorna alla vista con la chat history aggiornata
+
         return view('welcome')->with([
             'chatHistory' => $chatHistory,
             'isVatValid' => $isVatValid,
+            'isEmailValid' => $isEmailValid,
+            'isEmailCompleted' => $isEmailCompleted,
             'selectedCategory' => $selectedCategory,
             'categories' => $categories,
             'isCategoryFormVisible' => $this->isCategoryFormVisible,
@@ -97,9 +110,49 @@ class WelcomeController extends Controller{
             'description' => $this->description,
         ]);
     }
+
+    public function completeEmail(Request $request){
+        $chatHistory = [];
+        $isVatValid = false;
+        $categories = ['Assistenza Tecnica', 'Richieste di Rimborso', 'Altro'];
+
+        $customerId = session('customerId');
+        $emailPrefix = session('emailPrefix');
+        $emailSuffix = session('emailSuffix');
+    
+        $emailCompletion = $request->input('emailCompletion');
+        $completedEmail = $emailPrefix . $emailCompletion . $emailSuffix;
+
+        $customerEmail = CustomerEmail::where('customer_id', $customerId)->first();
+        $isEmailCompleted = session('isEmailCompleted', false);
+        $selectedCategory = false;
+        $isEmailValid = false; 
+
+        if ($customerEmail && $customerEmail->email === $completedEmail) {
+
+            $isVatValid = true;
+            session(['isVatValid' => $isVatValid]);
+            $isEmailCompleted = false; 
+
+            return view('welcome')->with([
+                'chatHistory' => $chatHistory,
+                'isVatValid' => $isVatValid,
+                'isEmailCompleted' => $isEmailCompleted,
+                'selectedCategory' => $selectedCategory,
+                'isEmailValid' => $isEmailValid,
+                'categories' => $categories,
+                'isCategoryFormVisible' => $this->isCategoryFormVisible,
+                'categorySaved' => $this->categorySaved,
+                'ticketCreated' => $this->ticketCreated,
+                'description' => $this->description,
+            ]);
+        } else {
+            return redirect()->back()->withErrors(['emailCompletion' => 'L\'indirizzo email fornito non corrisponde a quello del cliente.']);
+        }
+    }
     
     public function saveCategory(Request $request){
-        //dd($request->all());
+        
         $request->validate([
             'selectedCategory' => 'required',
             'description' => 'required',
@@ -146,7 +199,6 @@ class WelcomeController extends Controller{
         $ticketId = $ticket->id;
 
         return redirect()->route('show-summary', ['ticketId' => $ticketId]);
-        
     }
 
     public function showSummary($ticketId){

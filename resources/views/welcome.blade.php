@@ -21,7 +21,16 @@
                                     {{ session('success') }}
                                 </div>
                             @endif
-                            @if($isVatValid && !$selectedCategory)
+                            @if ($errors->any())
+                                <div class="alert alert-danger">
+                                    <ul>
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
+                            @if($isVatValid && !$selectedCategory && !$isEmailCompleted)
                                 <form id="category-form" method="post" action="{{ route('save-category') }}" enctype="multipart/form-data">
                                     @csrf
                                     <label for="category"><b>Seleziona la categoria:</b></label>
@@ -43,11 +52,22 @@
                             <form method="post" action="{{ route('sendMessage') }}" >
                                 @csrf
                                 <div id="chat-input-container">
-                                    <input type="text" name="chatInput" placeholder="Partita IVA">
-                                    <input type="text" name="phoneInput" placeholder="Ultime 3 cifre del numero di cellulare" />
+                                    <input type="text" name="chatInput" placeholder="Partita IVA" required>
                                     <button type="submit">Invia</button>
                                 </div>
                             </form>
+
+                           @if($isVatValid && !$selectedCategory && $isEmailValid)
+                                <form method="post" action="{{ route('completeEmail') }}" >
+                                    @csrf
+                                    <div id="complete-email-container">
+                                        <label for="emailCompletion"><b>Completa l'indirizzo email:</b></label>
+                                        <input type="text" name="emailCompletion" id="emailCompletion" placeholder="Inserisci soltanto le lettere mancanti" required>
+                                        <button type="submit">Continua</button>
+                                    </div>
+                                </form>
+                            @endif
+
                         </div>
                     </div>
                 </div>
@@ -190,5 +210,37 @@
     #ticket-form button:hover {
         background-color: green;
     }
+    
+    #complete-email-container {
+    text-align: center;
+    max-width: 400px;
+    margin: 0 auto;
+    }
 
+    #complete-email-container label {
+        display: block;
+        margin-bottom: 10px;
+    }
+
+    #emailCompletion {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    button {
+        background-color: #8A2BE2;
+        color: white;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #8A2BE2;
+    }
 </style>

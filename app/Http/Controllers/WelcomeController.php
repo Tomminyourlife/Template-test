@@ -16,6 +16,7 @@ class WelcomeController extends Controller{
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public $chatHistory = [];
+    public $isFormVisible = true;
     public $chatInput = '';
     public $isVatValid = false;
     public $selectedCategory = '';
@@ -37,6 +38,7 @@ class WelcomeController extends Controller{
             'ticketCreated' => $this->ticketCreated,
             'description' => $this->description,
             'isCategoryFormVisible' => $this->isCategoryFormVisible,
+            'isFormVisible' => $this->isFormVisible,
         ]);
     }
 
@@ -50,6 +52,7 @@ class WelcomeController extends Controller{
     }
 
     public function sendMessage(Request $request){
+        $isFormVisible = true;
         $chatHistory = [];
         $categories = ['Assistenza Tecnica', 'Richieste di Rimborso', 'Altro'];
         $isVatValid = false;
@@ -66,9 +69,11 @@ class WelcomeController extends Controller{
 
         if (strlen($pi) === 11) {
             $isVatValid = true; 
+            
 
             if ($isVatValid) {
                 $customer = Customer::where('pi', $pi)->first();
+                $isFormVisible = false;
 
                 if ($customer) {
                     $customerEmail = CustomerEmail::where('customer_id', $customer->id)->first();
@@ -86,6 +91,7 @@ class WelcomeController extends Controller{
                     }
                 } else {
                     $isVatValid = false;
+                    $isFormVisible = true;
                     $botResponse = "Partita IVA valida, ma nessun cliente trovato.";
                 }
             } else {
@@ -108,12 +114,14 @@ class WelcomeController extends Controller{
             'categorySaved' => $this->categorySaved,
             'ticketCreated' => $this->ticketCreated,
             'description' => $this->description,
+            'isFormVisible' => $isFormVisible,
         ]);
     }
 
     public function completeEmail(Request $request){
         $chatHistory = [];
         $isVatValid = false;
+        $isFormVisible = true;
         $categories = ['Assistenza Tecnica', 'Richieste di Rimborso', 'Altro'];
 
         $customerId = session('customerId');
@@ -133,6 +141,7 @@ class WelcomeController extends Controller{
             $isVatValid = true;
             session(['isVatValid' => $isVatValid]);
             $isEmailCompleted = false; 
+            $isFormVisible = false;
 
             return view('welcome')->with([
                 'chatHistory' => $chatHistory,
@@ -145,6 +154,7 @@ class WelcomeController extends Controller{
                 'categorySaved' => $this->categorySaved,
                 'ticketCreated' => $this->ticketCreated,
                 'description' => $this->description,
+                'isFormVisible' => $isFormVisible,
             ]);
         } else {
             return redirect()->back()->withErrors(['emailCompletion' => 'L\'indirizzo email fornito non corrisponde a quello del cliente.']);

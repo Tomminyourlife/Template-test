@@ -14,6 +14,7 @@ Route::middleware(['web', 'auth'])->group(function () {
 
 Route::get('/', [WelcomeController::class, 'index']);
 Route::post('/', [WelcomeController::class, 'sendMessage'])->name('sendMessage');
+Route::post('/complete-email', [WelcomeController::class, 'completeEmail'])->name('completeEmail');
 Route::post('/save-category', [WelcomeController::class, 'saveCategory'])->name('save-category');
 Route::get('/show-summary/{ticketId}', [WelcomeController::class, 'showSummary'])->name('show-summary');
 

@@ -49,13 +49,15 @@
                                 </form>
                             @endif
 
-                            <form method="post" action="{{ route('sendMessage') }}" >
-                                @csrf
-                                <div id="chat-input-container">
-                                    <input type="text" name="chatInput" placeholder="Partita IVA" required>
-                                    <button type="submit">Invia</button>
-                                </div>
-                            </form>
+                            @if($isFormVisible)
+                                <form method="post" action="{{ route('sendMessage') }}" >
+                                    @csrf
+                                    <div id="chat-input-container">
+                                        <input type="text" name="chatInput" placeholder="Partita IVA" required>
+                                        <button type="submit">Invia</button>
+                                    </div>
+                                </form>
+                            @endif
 
                            @if($isVatValid && !$selectedCategory && $isEmailValid)
                                 <form method="post" action="{{ route('completeEmail') }}" >

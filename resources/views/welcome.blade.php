@@ -9,7 +9,7 @@
 
                     <div class="card-body">
                         <div id="chat-container">
-                            <div id="chat-header"><h4>Ciao!</h4></div>
+                            <div id="chat-header" ><h4><b>Ciao!</b></h4></div>
                             <div id="chat-messages">
                                 <!-- Loop per mostrare i messaggi della chat -->
                                 @foreach($chatHistory as $message)
@@ -31,7 +31,7 @@
                                 </div>
                             @endif
                             @if($isVatValid && !$selectedCategory && !$isEmailCompleted)
-                                <form id="category-form" method="post" action="{{ route('save-category') }}" enctype="multipart/form-data">
+                                <form id="category-form" method="post" action="{{ route('save-category') }}" enctype="multipart/form-data" class="dropzone">
                                     @csrf
                                     <label for="category"><b>Seleziona la categoria:</b></label>
                                     <select name="selectedCategory" id="category" required>
@@ -43,9 +43,14 @@
                                     <label for="description"><b>Descrizione:</b></label>
                                     <textarea name="description" id="description" rows="4" required>{{ $description }}</textarea>
                                     <br>
-                                    <label for="attachments"><b>Allegati:</b></label>
-                                    <input type="file" name="attachments" multiple>
-                                    <button type="submit">Crea Ticket</button>
+                                    <div id="attachments-container">
+                                        <label for="attachments"><b>Allegati:</b></label>
+                                        <input type="file" name="attachments[]" class="attachment-input" multiple>
+                                    </div>
+                                    <br>
+                                    <button type="button" id="add-attachment-btn">Aggiungi Allegato</button>
+                                    <br><br>
+                                    <button type="submit" class="btn-primary">Crea Ticket</button>
                                 </form>
                             @endif
 
@@ -78,6 +83,22 @@
     </div>
 @endsection
 
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const addAttachmentBtn = document.getElementById('add-attachment-btn');
+        const attachmentsContainer = document.getElementById('attachments-container');
+
+        addAttachmentBtn.addEventListener('click', function () {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.name = 'attachments[]';
+            input.className = 'attachment-input';
+            input.multiple = true;
+            attachmentsContainer.appendChild(input);
+        });
+    });
+</script>
+
 <style scoped>
     #chat-container {
         height: 400px;
@@ -87,8 +108,8 @@
     }
 
     #chat-header {
-        background-color: #8A2BE2;
-        color: #fff;
+        background-color: #40E0D0;
+        color: black;
         padding: 10px;
         text-align: center;
         border-top-left-radius: 8px;
@@ -106,6 +127,7 @@
         border-radius: 8px;
         max-width: 70%;
         word-wrap: break-word;
+        font-size: 17px;
     }
 
     .user-message {
@@ -114,8 +136,8 @@
     }
 
     .bot-message {
-        background-color: #8A2BE2;
-        color: #fff;
+        background-color: #40E0D0;
+        color: black;
     }
 
     #chat-input-container {
@@ -136,7 +158,7 @@
     }
 
     #chat-input-container button {
-        background-color: green;
+        background-color: #0000CD;
         color: #fff;
         border: none;
         padding: 8px 16px;
@@ -145,7 +167,7 @@
     }
 
     #chat-input-container button:hover {
-        background-color: green;
+        background-color: #0000CD;
     }
 
     #category-form {
@@ -166,8 +188,8 @@
         margin-bottom: 16px; 
     }
 
-    #category-form button {
-        background-color: #4caf50; 
+    .btn-primary {
+        background-color: #0000CD; 
         color: white; 
         padding: 10px 15px; 
         font-size: 18px; 
@@ -175,42 +197,8 @@
         cursor: pointer; /* Cambia il cursore al passaggio del mouse sul pulsante */
     }
 
-    #category-form button:hover {
-        background-color: green; 
-    }
-    
-    /* Stile generale del form del ticket */
-    #ticket-form {
-        margin-top: 20px;
-        margin-left: 70px;
-        margin-right: auto;
-        max-width: 400px;
-    }
-
-    /* Stile del label */
-    #ticket-form label {
-        display: block;
-        margin-bottom: 8px;
-    }
-
-    /* Stile dell'input di tipo file */
-    #ticket-form input[type="file"] {
-        margin-bottom: 12px;
-    }
-
-    /* Stile del bottone di invio */
-    #ticket-form button {
-        background-color: #4caf50;
-        color: #ffffff;
-        padding: 10px 15px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-    }
-
-    /* Hover del bottone di invio */
-    #ticket-form button:hover {
-        background-color: green;
+    .btn-primary:hover {
+        background-color: #0000CD; 
     }
     
     #complete-email-container {
@@ -234,7 +222,7 @@
     }
 
     button {
-        background-color: #8A2BE2;
+        background-color: #4169E1;
         color: white;
         padding: 10px 15px;
         border: none;
@@ -243,6 +231,6 @@
     }
 
     button:hover {
-        background-color: #8A2BE2;
+        background-color: #4169E1;
     }
 </style>

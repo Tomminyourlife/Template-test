@@ -44,7 +44,7 @@ class WelcomeController extends Controller{
 
     public function __construct(){
         $this->isVatValid = false;
-        $this->addBotMessage("Inserisci la tua Partita IVA");
+        $this->addBotMessage("Inserire la Partita IVA");
     }
 
     public function addBotMessage($message){
@@ -187,12 +187,6 @@ class WelcomeController extends Controller{
             'customer_id' => $customerId,
             'title' => $selectedCategory,
         ]);
-
-         // Ottenere il team associato alla categoria
-        $team = $category->teams;
-
-        // Assegna il team al ticket
-        $ticket->team()->associate($team)->save();
 
         if ($request->hasFile('attachments')) {
             $path = $request->file('attachments')->store('attachments', 'public');

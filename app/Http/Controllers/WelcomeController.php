@@ -166,7 +166,7 @@ class WelcomeController extends Controller{
         $request->validate([
             'selectedCategory' => 'required',
             'description' => 'required',
-            'attachments.*' => 'mimes:jpeg,png,pdf,docx|max:2048',
+            'attachments.*' => 'mimes:txt,jpeg,png,pdf,docx|max:2048',
         ]);
 
         $categories = ['Assistenza Tecnica', 'Richieste di Rimborso', 'Altro'];
@@ -189,9 +189,11 @@ class WelcomeController extends Controller{
         ]);
 
         if ($request->hasFile('attachments')) {
-            $path = $request->file('attachments')->store('attachments', 'public');
-            $ticketAttachment = new Attachment(['path' => $path]);
-            $ticket->attachments()->save($ticketAttachment);
+            foreach ($request->file('attachments') as $file) {
+                $path = $file->store('attachments', 'public');
+                $ticketAttachment = new Attachment(['path' => $path]);
+                $ticket->attachments()->save($ticketAttachment);
+            }
         }
 
         // Imposta le variabili di stato per indicare la creazione del ticket
@@ -199,6 +201,8 @@ class WelcomeController extends Controller{
         $this->categorySaved = true;
         $this->ticketCreated = true;
         $this->description = $description;
+
+        
 
         $ticketId = $ticket->id;
 

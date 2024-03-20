@@ -1,6 +1,9 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use App\Mail\TicketAssignedToTeam;
+use App\Mail\TicketCreated;
 use App\Models\Attachment;
 use App\Models\Category;
 use App\Models\Ticket;
@@ -8,6 +11,7 @@ use App\Models\Customer;
 use App\Models\CustomerEmail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Mail;
 
 class WelcomeController extends Controller{
     /*
@@ -175,9 +179,17 @@ class WelcomeController extends Controller{
         $description = $request->input('description');
         $customerId = session('customerId');
 
+        $teamEmails = [
+            'Assistenza Tecnica' => 'tbianchi2001@gmail.com',
+            'Richieste di Rimborso' => 'team2@example.com',
+            'Altro' => 'team3@example.com',
+        ];
+        $teamEmail = $teamEmails[$selectedCategory];
+        
         $category = Category::create([
             'name' => $selectedCategory,
             'description' => $description,
+            'email' => $teamEmail,
         ]);
         
         $chatHistory = $this->chatHistory;
@@ -202,18 +214,19 @@ class WelcomeController extends Controller{
         $this->ticketCreated = true;
         $this->description = $description;
 
-        
+        $customerEmail = CustomerEmail::where('customer_id', $customerId)->first();
+
+        // Invio delle email
+        Mail::to($customerEmail)->send(new TicketCreated($ticket));
+        Mail::to($teamEmail)->send(new TicketAssignedToTeam($ticket));
 
         $ticketId = $ticket->id;
-
         return redirect()->route('show-summary', ['ticketId' => $ticketId]);
     }
 
     public function showSummary($ticketId){
-
         $ticket = Ticket::findOrFail($ticketId);
         $attachments = $ticket->attachments()->get();
-        
         return view('summary', compact('ticket', 'attachments' ));
     }
 }

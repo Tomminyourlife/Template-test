@@ -45,9 +45,9 @@
                                     <br>
                                     <div id="attachments-container">
                                         <label for="attachments"><b>Allegati:</b></label>
-                                        <input type="file" name="attachments[]" class="attachment-input" multiple>
+                                        <input type="file" name="attachments[]" class="attachment-input" multiple style="display: none;">
                                     </div>
-                                    <br>
+                                    <br> 
                                     <button type="button" id="add-attachment-btn">Aggiungi Allegato</button>
                                     <br><br>
                                     <button type="submit" class="btn-primary">Crea Ticket</button>

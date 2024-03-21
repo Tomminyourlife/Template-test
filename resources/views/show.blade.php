@@ -3,7 +3,9 @@
 @section('title', 'Dettaglio Ticket')
 
 @section('content_header')
-    <h1>Dettaglio Ticket</h1>
+    <div class="page-header">
+        <h1>Dettaglio Ticket</h1>
+    </div>
 @stop
 
 @section('content')
@@ -24,11 +26,16 @@
             <hr>
             <div class="ticket-comments">
                 <h3>Commenti</h3>
-                <ul>
-                    @foreach($ticket->comments as $comment)
-                        <strong>{{ $comment->user->name }} {{ $comment->user->cognome }}:</strong> {{ $comment->content }}
-                    @endforeach
-                </ul>
+                @foreach($ticket->comments as $comment)
+                    <div class="ticket-comment">
+                        <p>
+                            <strong>{{ $comment->user->name }} {{ $comment->user->cognome }}:</strong> {{ $comment->content }}
+                        </p>
+                        <small>
+                            Scritto il {{ $comment->created_at->format('d/m/Y') }} alle {{ $comment->created_at->format('H:i') }}
+                        </small>
+                    </div>
+                @endforeach
             </div>
             <hr>
             <div class="add-comment">
@@ -80,5 +87,22 @@
     /* Stile per il form di aggiunta commento */
     .add-comment textarea {
         resize: vertical; /* Permette la ridimensionamento verticale */
+    }
+
+    .ticket-comment {
+        margin-bottom: 10px; /* Aggiungi uno spazio di 10px tra i commenti */
+    }
+
+    .page-header {
+        background-color: #f3f3f3; /* Cambia il colore dello sfondo dell'header */
+        padding: 10px; /* Aggiunge spazio intorno all'header */
+        border: 1px solid #ccc;
+    }
+
+    .page-header h1 {
+        color: #333; /* Cambia il colore del testo dell'header */
+        font-size: 24px; /* Cambia la dimensione del font dell'header */
+        font-family: Arial, sans-serif; /* Cambia il tipo di carattere dell'header */
+        font-weight: bold; /* Rendi il testo in grassetto */
     }
 </style>

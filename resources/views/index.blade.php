@@ -9,6 +9,50 @@
 @section('content')
     <div class="box">
         <div class="box-body">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="info-box bg-green">
+                        <span class="info-box-icon"><i class="fa fa-folder-open"></i></span>
+                        <div class="info-box-content">
+                            <span class="info-box-text">Aperti</span>
+                            <span class="info-box-number">{{ $statusCounts['Aperto'] ?? 0 }}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="info-box bg-red">
+                        <span class="info-box-icon"><i class="fa fa-check-circle"></i></span>
+                        <div class="info-box-content">
+                            <span class="info-box-text">Chiusi</span>
+                            <span class="info-box-number">{{ $statusCounts['Chiuso'] ?? 0 }}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="info-box bg-yellow">
+                        <span class="info-box-icon"><i class="fa fa-cogs"></i></span>
+                        <div class="info-box-content">
+                            <span class="info-box-text">In Lavorazione</span>
+                            <span class="info-box-number">{{ $statusCounts['In Lavorazione'] ?? 0 }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                @foreach($titleCounts as $title => $count)
+                    <div class="col-md-4">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-gray"><i class="fa fa-file"></i></span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">{{ $title }}</span>
+                                <span class="info-box-number">{{ $count }}</span>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+            <hr>
             <table class="table">
                 <thead>
                     <tr>

@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 class TicketController extends Controller{
     public function index(){
         // Recupera tutti i ticket dal database
-        $tickets = Ticket::all();
+        $tickets = Ticket::orderBy('created_at', 'desc')->get();
         
         $statusCounts = $tickets->groupBy('status')->map(function ($tickets) {
             return $tickets->count();

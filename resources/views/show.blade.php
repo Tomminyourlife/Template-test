@@ -12,12 +12,12 @@
             <h2>{{ $ticket->title }}</h2>
             <p>{{ $ticket->description }}</p>
             <div class="ticket-status">
-                <h3>Stato: <span class="badge badge-{{ $ticket->status === 'Aperto' ? 'success' : ($ticket->status === 'In Lavorazione' ? 'primary' : 'danger') }}">{{ $ticket->status }}</span></h3>
+                <h3>Stato: <span class="badge badge-{{ $ticket->status === 'Aperto' ? 'success' : ($ticket->status === 'In Lavorazione' ? 'warning' : 'danger') }}">{{ $ticket->status }}</span></h3>
                 <form action="{{ route('tickets.update', $ticket->id) }}" method="post">
                     @csrf
                     @method('PUT')
                     <button type="submit" name="status" value="Aperto" class="btn btn-success">Aperto</button>
-                    <button type="submit" name="status" value="In Lavorazione" class="btn btn-primary">In lavorazione</button>
+                    <button type="submit" name="status" value="In Lavorazione" class="btn btn-warning">In lavorazione</button>
                     <button type="submit" name="status" value="Chiuso" class="btn btn-danger">Chiuso</button>
                 </form>
             </div>
@@ -52,8 +52,8 @@
         background-color: #28a745;
     }
 
-    .badge-primary {
-        background-color: #007bff;
+    .badge-warning {
+        background-color: yellow;
     }
 
     .badge-danger {

@@ -11,9 +11,17 @@ class TicketController extends Controller{
     public function index(){
         // Recupera tutti i ticket dal database
         $tickets = Ticket::all();
+        
+        $statusCounts = $tickets->groupBy('status')->map(function ($tickets) {
+            return $tickets->count();
+        });
+
+        $titleCounts = $tickets->groupBy('title')->map(function ($tickets) {
+            return $tickets->count();
+        });
 
         // Passa i ticket alla vista
-        return view('index', compact('tickets'));
+        return view('index', compact('tickets', 'statusCounts', 'titleCounts'));
     }
 
     public function show($id){

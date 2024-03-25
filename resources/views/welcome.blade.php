@@ -1,6 +1,12 @@
 @extends('layouts.app')
 
 @section('content')
+    <div class="text-center">
+            <!-- Aggiungi il bottone per accedere come cliente -->
+            <form action="{{ route('customer.login') }}" method="get">
+                <button type="submit" class="btn btn-primary">Accedi come cliente</button>
+            </form>
+    </div>
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8">

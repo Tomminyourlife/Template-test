@@ -387,11 +387,11 @@ return [
         /*[
             'text'       => 'Chatbot',
             'url'        => '/admin/pages/about',
-        ],
+        ],*/
         [
             'text'       => 'Ticket',
             'url'        => '/admin/pages/ticket',
-        ],*/
+        ],
         [
             'text'       => 'AllTickets',
             'url'        => '/admin/pages/alltickets',

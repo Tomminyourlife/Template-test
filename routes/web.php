@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\Auth\CustomerLoginController;
 use App\Http\Controllers\TicketController;
+use App\Http\Controllers\TicketingController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
@@ -25,6 +27,17 @@ Route::get('/show-summary/{ticketId}', [WelcomeController::class, 'showSummary']
 
 
 Auth::routes();
+Route::get('/customer/login', [CustomerLoginController::class, 'showLoginForm'])->name('customer.login');
+Route::post('/customer/dashboard', [CustomerLoginController::class, 'attemptLogin'])->name('customer.login.submit');
+Route::get('/customer/dashboard', [CustomerLoginController::class, 'dashboard'])->name('dashboard');
+
+Route::middleware(['web', 'customer.auth'])->group(function () {
+    Route::post('/customer/logout', [CustomerLoginController::class, 'logout'])->name('customer.logout');
+    Route::get('/admin/pages/ticket', [TicketingController::class, 'index'])->name('ticketing.index');
+    Route::get('/tickets/{ticket}/comments', [TicketingController::class, 'showComments'])->name('ticket.comments');
+    Route::post('/comments/store', [TicketingController::class, 'store'])->name('comment.store');
+});
+
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 

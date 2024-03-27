@@ -59,7 +59,6 @@
                         <th>ID ticket</th>
                         <th>Cliente</th>
                         <th>Titolo</th>
-                        <th>Descrizione</th>
                         <th>Stato</th>
                     </tr>
                 </thead>
@@ -69,7 +68,6 @@
                             <td>{{ $ticket->id }}</td>
                             <td>{{ $ticket->customer->nome }}</td>
                             <td><a href="{{ route('tickets.show', $ticket->id) }}">{{ $ticket->title }}</a></td>
-                            <td>{{ $ticket->description }}</td>
                             <td>{{ $ticket->status }}</td>
                         </tr>
                     @endforeach

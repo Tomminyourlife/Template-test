@@ -1,17 +1,19 @@
 @extends('adminlte::page')
 
-@section('title', 'Ticket Comments')
+@section('title', 'Dettaglio Ticket')
 
 @section('content')
     <div class="container">
         <div class="card mt-4">
             <div class="card-body">
                 <h1><b>Ticket:</b> {{ $ticket->title }}</h1>
+                <hr>
 
                 <div class="ticket-info mb-4">
                     <h4><b>Descrizione:</b></h4>
                     <p>{{ $ticket->description }}</p>
                 </div>
+                <hr>
 
         <h2 class="mb-4">Chat</h2>
             <ul class="list-group comment-list">
@@ -31,6 +33,7 @@
                     </li>
                 @endforeach
             </ul>
+            <hr>
 
                 <div class="add-comment mt-4">
                     <h3>Aggiungi Commento</h3>

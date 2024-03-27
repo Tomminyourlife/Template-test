@@ -1,30 +1,66 @@
 @extends('adminlte::page')
 
-@section('title', 'Ticket List')
+@section('title', 'Elenco Ticket')
 
 @section('content')
     <div class="container">
-        <h1>Ticket List</h1>
+        <h1 class="mb-4">Elenco Ticket</h1>
 
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Titolo</th>
-                    <th>Descrizione</th>
-                    <th>Stato</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($tickets as $ticket)
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+                <thead class="thead-dark">
                     <tr>
-                        <td>{{ $ticket->id }}</td>
-                        <td><a href="{{ route('ticket.comments', $ticket->id) }}">{{ $ticket->title }}</a></td>
-                        <td>{{ $ticket->description }}</td>
-                        <td>{{ $ticket->status }}</td>
+                        <th scope="col">ID</th>
+                        <th scope="col">Titolo</th>
+                        <th scope="col">Descrizione</th>
+                        <th scope="col">Stato</th>
                     </tr>
-                @endforeach
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach ($tickets as $ticket)
+                        <tr>
+                            <td>{{ $ticket->id }}</td>
+                            <td><a href="{{ route('ticket.comments', $ticket->id) }}" class="text-primary">{{ $ticket->title }}</a></td>
+                            <td class="description-column">{{ $ticket->description }}</td>
+                            <td>
+                                <span class="badge badge-{{ $ticket->status === 'Aperto' ? 'success' : ($ticket->status === 'In Lavorazione' ? 'warning' : 'danger') }}">{{ $ticket->status }}</span>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
     </div>
 @endsection
+
+
+<style>
+    .table th,
+    .table td {
+        vertical-align: middle;
+    }
+
+    .table thead th {
+        text-align: center;
+    }
+
+    .table tbody td {
+        vertical-align: top;
+    }
+
+    .table a {
+        text-decoration: none;
+    }
+
+    .table a:hover {
+        text-decoration: underline;
+    }
+
+    .description-column {
+        max-width: 100px; 
+        overflow-wrap: break-word; /* Fa andare a capo il testo quando raggiunge la larghezza massima */
+        word-wrap: break-word;
+    }
+</style>
+
+

@@ -389,7 +389,7 @@ return [
             'url'        => '/admin/pages/about',
         ],*/
         [
-            'text'       => 'Ticket',
+            'text'       => 'YourTickets',
             'url'        => '/admin/pages/ticket',
         ],
         [

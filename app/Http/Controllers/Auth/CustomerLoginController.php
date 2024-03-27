@@ -78,18 +78,20 @@ class CustomerLoginController extends Controller{
         }
 
         $useremail = CustomerEmail::where('email', $credentials['email'])->first();
-        $user = Customer::find($useremail->customer_id);
-        if ($user) {
-            Auth::login($useremail);
-            $request->session()->put('customer', $user);
-            return redirect()->intended('/customer/dashboard');
-        } else {
-            return back()->withErrors(['email' => 'Invalid email']);
+        if ($useremail) {
+            $user = Customer::find($useremail->customer_id);
+            if ($user) {
+                Auth::login($useremail);
+                $request->session()->put('customer', $user);
+                return redirect()->intended('/customer/dashboard');
+            }
         }
+    
+        return back()->withErrors(['email' => 'Invalid email']);
     }
 
     public function dashboard(){
-        $message = "Benvenuto nella tua dashboard! Clicca <a href='" . route('ticketing.index') . "'>qui</a> per vedere i tuoi ticket.";
+        $message = "Sei nella tua dashboard! Clicca <a href='" . route('ticketing.index') . "'>qui</a> per vedere i tuoi ticket.";
         return view('dashboard', compact('message'));
     }
 

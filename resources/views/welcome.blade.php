@@ -11,7 +11,7 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
-                    <div class="card-header"><h2><b>Benvenuto</b></h2></div>
+                    <div class="card-header"><h2><b>Benvenuto! Crea qua il tuo ticket</b></h2></div>
 
                     <div class="card-body">
                         <div id="chat-container">

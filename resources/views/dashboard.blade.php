@@ -3,7 +3,7 @@
 @section('title', 'Admin Dashboard')
 
 @section('content_header')
-    <h1>Welcome to Customer Dashboard</h1>
+    <h1>Benvenuto</h1>
     @if(isset($message))
         <p class="message">{!! $message !!}</p>
     @endif
@@ -12,7 +12,7 @@
 @section('content')
     <form action="{{ route('customer.logout') }}" method="POST">
         @csrf
-        <button type="submit">Logout</button>
+        <button type="submit" class="btn btn-link"><h5>Logout</h5></button>
     </form>
 @endsection
 
